@@ -5,9 +5,9 @@ Each task folder represents a more complex behavior than the previous:
   <li>Task 1: Rational Bird Agent characterized by...
     <ul>
       <li>randomized track of x, y, z coordinates</li>
-      <li>yaw, pitch, and roll matches movements</li>
+      <li>yaw, pitch, and roll match movement direction</li>
       <li>smooth turns</li>
-      <li>small noisy movement characterized by bird flight</li>
+      <li>small noisy movements indicative of bird flight</li>
     </ul>
   </li>
   <li>Task 2: Dolphin & Fish characterized by...
