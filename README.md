@@ -1,7 +1,7 @@
 # IntelligentSystems
 ###Objects exhibiting intelligent behavior through random walks, natural movements, collision avoidance, goal seeking, &amp; feedback adjustments.
 Each task folder represents a more complex behavior than the previous:
-<ol>
+<ul>
   <li>Task 1: Rational Bird Agent characterized by...
     <ul>
       <li>randomized track of x, y, z coordinates</li>
@@ -43,5 +43,5 @@ Each task folder represents a more complex behavior than the previous:
       <li>Aerodynamic modeling where speed, roll, and weight affect altitude</li>
     </ul>
   </li>
-  </ol>
+  </ul>
 
