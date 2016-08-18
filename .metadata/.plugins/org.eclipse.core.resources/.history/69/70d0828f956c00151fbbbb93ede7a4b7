@@ -1,0 +1,70 @@
+import java.util.ArrayList;
+
+import cs480viewer.task1.Viewer;
+
+public class CS480Task1 {
+   private static Viewer _viewer = null;
+
+   public CS480Task1() {
+//	   Course course = Course.horizontalSquare(200);
+//	   Course course = Course.straight(250);
+//	   Course course = Course.angled(400);
+	  Course course = Course.generateRandomCourse(10);
+      doPart1(course);
+      doPart2(course);
+	  doPart3(course);
+	  doPart4(course);
+	  doPart5(course);
+   }
+ 
+   private static void doPart1(Course course) {
+	   _viewer = new Viewer("C:\\Users\\Richard\\Google Drive\\EWU\\CSCD480 Intelligent Systems\\workspace\\task1\\tracks\\track1_1.trk");
+	   visualize(course);
+   }
+   
+   private void doPart2(Course course) {
+	   _viewer = new Viewer("C:\\Users\\Richard\\Google Drive\\EWU\\CSCD480 Intelligent Systems\\workspace\\task1\\tracks\\track1_2.trk");
+	   course.intermediates(3);
+	   visualize(course);
+   }
+
+   private void doPart3(Course course) {
+	   _viewer = new Viewer("C:\\Users\\Richard\\Google Drive\\EWU\\CSCD480 Intelligent Systems\\workspace\\task1\\tracks\\track1_3.trk");
+	   visualizeOrientation(course);
+   }
+   
+   private void doPart4(Course course) {
+	   course.perturb();
+	   _viewer = new Viewer("C:\\Users\\Richard\\Google Drive\\EWU\\CSCD480 Intelligent Systems\\workspace\\task1\\tracks\\track1_4.trk");
+	   visualizeOrientation(course);
+   }
+   
+   private void doPart5(Course course) {
+	   course.smooth();
+	   _viewer = new Viewer("C:\\Users\\Richard\\Google Drive\\EWU\\CSCD480 Intelligent Systems\\workspace\\task1\\tracks\\track1_5.trk");
+	   visualizeOrientation(course);
+   }
+   
+   private static void visualize(Course course) {
+	   for (Coordinate c : course.getCoords()) {
+		   _viewer.doAddEvent("bird", c.getX(), c.getY(), c.getZ(), 0, 0, 0);
+		   _viewer.doAdvanceEventClock(5);
+	   }
+   }
+   
+   private static void visualizeOrientation(Course course) {
+	   ArrayList<Coordinate> coords = course.getCoords();
+	   for (int i = 0; i < coords.size() - 1; i ++) {
+		   Coordinate c1 = coords.get(i);
+		   Coordinate c2 = coords.get(i + 1);
+		   double pitch = Orientation.pitch(c1, c2);
+		   double yaw = Orientation.yaw(c1, c2);
+		   _viewer.doAddEvent("bird", c1.getX(), c1.getY(), c1.getZ(), yaw, pitch, 0);
+		   _viewer.doAdvanceEventClock(10);
+	   }
+   }
+   
+   public static void main(final String[] args){
+      new CS480Task1();
+   }
+}

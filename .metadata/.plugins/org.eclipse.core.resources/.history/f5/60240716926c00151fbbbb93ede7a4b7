@@ -1,0 +1,8 @@
+
+public class Agent {
+	private Course course;
+	
+	public Agent() {
+		course = Course.generateRandomCourse(size)
+	}
+}

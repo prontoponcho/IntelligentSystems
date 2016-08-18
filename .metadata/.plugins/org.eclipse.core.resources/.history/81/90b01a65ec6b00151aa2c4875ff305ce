@@ -1,0 +1,20 @@
+
+public class Orientation {
+
+	public static double pitch(Coordinate c1, Coordinate c2) {
+		double deltaY = c2.getY() - c1.getY();
+		double hyp = Coordinate.distance(c1, c2);
+		double angle = Math.asin(deltaY / hyp);
+		return (int)Math.toDegrees(angle);
+	}
+	
+	public static int yaw(Coordinate c1, Coordinate c2) {
+	double deltaX = c2.getX() - c1.getX();
+	double deltaZ = c2.getZ() - c1.getZ();
+	double angle = Math.atan(deltaX / deltaZ);
+	if (deltaZ < 0)
+		return (int)Math.toDegrees(angle) + 180;
+	return (int)Math.toDegrees(angle);
+}
+
+}

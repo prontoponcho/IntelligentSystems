@@ -1,0 +1,55 @@
+import cs480viewer.task2.Agent;
+import cs480viewer.task2.AgentManager;
+import cs480viewer.task2.E_TrackMode;
+import cs480viewer.task2.Viewer;
+
+//=============================================================================================================================================================
+public class CS480Task2Template
+{
+   // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+   public static void main(final String[] args)
+   {
+      new CS480Task2Template();
+   }
+
+   private final Viewer _viewer;
+
+   // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+   public CS480Task2Template()
+   {
+      _viewer = new Viewer("/home/dtappan/task2_1.trk", 100);
+    
+      doTest1();
+   }
+
+   // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+   private void doTest1()
+   {
+      // this block provides control over displaying individual tracks; use the T key to toggle all on and off simultaneously. It applies to record mode only;
+      // your settings are not retained for grading
+      // {
+      AgentManager agentManager = _viewer.getAgentManager();
+
+      Agent agentDolphin = agentManager.getAgent("dolphin");
+
+      agentDolphin.setTrackMode(E_TrackMode.HORIZONTAL_VERTICAL);
+      // }
+
+      int v;
+
+      for (int i = 0; i < 30; ++i)
+      {
+         v = (i * 5);
+
+         _viewer.doAddEvent("dolphin", -50 + v, v * 3, v, 0, 20 + i, 0);
+
+         _viewer.doAddEvent("fish1", +100 - v, 0, v * 3, 10 + i, 0, 0);
+         _viewer.doAddEvent("fish2", +150, 0, v, 20 + i, 0, 0);
+         _viewer.doAddEvent("fish3", +200, 0, v * 2, 30 + i, 0, 0);
+         _viewer.doAddEvent("fish4", +250 + v, 0, v, 40 + i, 0, 0);
+         _viewer.doAddEvent("fish5", +300 + (v * 2), 0, 0, 50 + i, 0, 0);
+
+         _viewer.doAdvanceEventClock(); // call this to advance the time step; all doAddEvents above happen at the same time
+      }
+   }
+}

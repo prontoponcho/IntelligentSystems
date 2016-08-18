@@ -1,0 +1,23 @@
+1445987281339	Rename method 'inView'
+1445987324704	Rename method 'signalDetected'
+1445987572278	Rename type 'AgentDetector'
+1445987612882	Rename type 'AgentLocation'
+1445987644839	Rename field 'target'
+1445987682622	Rename field 'wayPoint'
+1445988090727	Rename method 'detect'
+1445994526081	Rename field 'targetCoord'
+1445995536767	Delete element
+1445996174011	Rename field 'signals'
+1445997554584	Rename method 'removeDetectSignals'
+1445998545577	Delete element
+1445998551348	Delete element
+1445999395363	Rename local variable 'sideTwo'
+1445999416970	Rename local variable 'sideTwo'
+1445999746747	Rename local variable 'c'
+1446006621118	Rename local variable 'i'
+1446007050925	Rename method 'calculateTarget'
+1446007701778	Rename local variable 'currPosition'
+1446007735837	Rename local variable 'currPosition'
+1446007783881	Rename method 'calculateTargetPosition'
+1446056060220	Rename method 'removeDetectedSignals'
+1446056075643	Rename method 'propogateSignal'

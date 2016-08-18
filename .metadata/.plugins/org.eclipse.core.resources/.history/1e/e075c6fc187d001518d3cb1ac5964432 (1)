@@ -1,0 +1,100 @@
+import java.util.ArrayList;
+
+import cs480viewer.task5.Viewer;
+
+public class Blimp extends Agent{
+	private ArrayList<Signal> detectedSignals = new ArrayList<Signal>();
+	private ArrayList<Station> stations = new ArrayList<Station>();
+	private Coordinate targetPosition = null;
+	private double viewingDepth = 5;
+	
+	public Blimp(ArrayList<Station> stations) {
+		this.stations = stations;
+	}
+	
+	public void advance() {
+		if (isTracking())
+			track();
+		else {
+			detectSignals();
+			calculateTarget();
+		}
+		//else do nothing;
+	}
+	
+	//target location
+	private boolean isTracking() {
+		return targetPosition != null;
+	}
+	
+	//
+	private void track() {
+		if (isDistantTarget()) {
+			course = Course.track(this.location(), targetPosition, 1);
+			curr = 0;
+		} else {
+			targetPosition = null;
+		}
+	}
+	
+	private boolean isDistantTarget() {
+		return Coordinate.distance(targetPosition, this.location()) >= 1;
+	}
+	
+	private void detectSignals() {
+		for (Station station : stations) {
+			for (Signal signal : station.signals()) {
+				if (isDetected(signal))
+					detectedSignals.add(signal);
+			}
+			station.removeDetectedSignals();
+		}
+	}
+	
+	private Coordinate calculateTarget() {
+		if (detectedSignals.size() == 2) {
+			double a = detectedSignals.get(0).distanceTraveled();
+			double c = detectedSignals.get(1).distanceTraveled();
+			removeDetectedSignals();
+			double b = Coordinate.distance(stations.get(0).location(), stations.get(1).location());
+			this.location = calculateTarget(a, b, c);
+		}
+		return null;
+	}
+	
+	private Coordinate calculateTarget(double a, double b, double c) {
+		double angle = lawOfCosines(a, b, c);
+		double deltaX = Math.sin(angle);
+		double deltaZ = Math.cos(angle);
+		double x = stations.get(0).location().getX() + deltaX;
+		double z = stations.get(0).location().getZ() + deltaZ;
+		return new Coordinate(x, 0, z);
+	}
+
+	
+	private double lawOfCosines(double a, double b, double c) {
+		double numerator = Math.pow(c, 2) - Math.pow(a, 2) - Math.pow(b, 2);
+		double denominator = (-2) * a * b;
+		double angle = Math.acos(Math.toRadians(numerator/denominator));
+		return angle;
+	}
+	
+	public void removeDetectedSignals() {
+		for (int i = 0; i < detectedSignals.size(); i++) {
+			detectedSignals.remove(i);
+		}
+	}
+	
+	public boolean isDetected(Signal signal) {
+		boolean detected = Coordinate.distance(signal.location(), this.location()) <= viewingDepth;
+		if (detected)
+			signal.setDetected();
+		return detected;
+	}
+	
+	//testing
+	public static void main(String[] args) {
+		
+	}
+
+}

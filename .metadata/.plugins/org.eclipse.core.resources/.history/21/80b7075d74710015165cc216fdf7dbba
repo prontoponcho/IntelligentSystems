@@ -1,0 +1,74 @@
+import java.util.ArrayList;
+
+import cs480viewer.task2.Viewer;
+
+public class AgentDetector extends Agent{
+	AgentLocation subject = null;
+	Agent target = null;
+	
+	public AgentDetector(AgentLocation subject) {
+		super();
+		this.subject = subject; 
+		//does not register with subject
+	}
+	
+	@Override
+	public void advance() {
+		if (target != null) {
+			track();
+		} else {
+			target = subject.detect(this);
+			if (target == null)
+				super.advance();
+			else {
+				track();
+			}
+		}
+	}
+	
+	private void track() {
+		if (subject.detect(this) != null) {
+			course = Course.track(this.location(), target.location());
+			curr = 0;
+		} else {
+			target = null;
+		}
+	}
+	
+	private boolean isDistant() {
+		return Coordinate.distance(target.location(), this.location()) > 5;
+	}
+	
+	//used for dolphin's field of vision
+	public Coordinate endViewpoint(double angle, double length) {
+		double relativeAngle = (this.yaw() + angle) % 360;
+		double deltaX = length * Math.sin(Math.toRadians(relativeAngle));
+		double deltaY = 0;
+		double deltaZ = length * Math.cos(Math.toRadians(relativeAngle));
+		return new Coordinate(deltaX + this.x(), deltaY + this.y(), deltaZ + this.z());
+	}
+	
+	//testing
+	public static void main(String[] args) {
+		Viewer _viewer = new Viewer("C:\\Users\\Richard\\Google Drive\\EWU\\CSCD480 Intelligent Systems\\workspace\\task2\\tracks\\task2_detector.trk", 10);
+		AgentLocation subject = new AgentLocation();
+		Agent[] agents = new Agent[5];
+		for (int i = 0; i < agents.length; i++) {
+			agents[i] = new AgentObserver(subject);
+
+		}
+		Agent dolphin = new AgentDetector(subject);
+ 
+		for (int i = 0; i < 1000; i++) {
+			for (int j = 0; j < agents.length; j++) {
+				String fish = "fish" + (j + 1);
+				_viewer.doAddEvent(fish, agents[j].x(), agents[j].y(), agents[j].z(), agents[j].yaw(), 0, 0);
+				agents[j].advance();
+			}
+			_viewer.doAddEvent("dolphin", dolphin.x(), dolphin.y(), dolphin.z(), dolphin.yaw(), 0, 0);
+			dolphin.advance();
+			_viewer.doAdvanceEventClock(); 
+		}
+	}
+
+}

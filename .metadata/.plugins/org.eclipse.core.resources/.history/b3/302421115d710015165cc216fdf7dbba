@@ -1,0 +1,31 @@
+
+public class AgentDetector extends Agent{
+	AgentLocation subject = null;
+	
+	public AgentDetector(AgentLocation subject) {
+		super();
+		this.subject = subject; 
+		//does not register with subject
+	}
+	
+	@Override
+	public void advance() {
+		Agent fish = subject.detect(this);
+		if (fish == null)
+			super.advance();
+		else {
+			track(fish);
+		}
+	}
+	
+	private void track(Agent fish) {
+		
+	}
+	
+	public boolean inView(Agent a) {
+		Coordinate c = a.location();
+		
+		return false;
+	}
+
+}

@@ -1,0 +1,78 @@
+
+public class Coordinate {
+	private double x;
+	private double y;
+	private double z;
+	
+	public Coordinate() {
+		setX(0);
+		setY(0);
+		setZ(0);
+	}
+	
+	public Coordinate(double x, double y, double z) {
+//		if (!inBounds(x) || !inBounds(y) || !inBounds(z))
+//			throw new IllegalArgumentException("passed data out of bounds");
+		this.setX(x);
+		this.setY(y);
+		this.setZ(z);
+	}
+	
+	private boolean inBounds(double d) {
+		return -500 <= d && d <= 500;
+	}
+	
+	
+	public static double distance(Coordinate c1, Coordinate c2) {
+		double deltaX = c1.getX() - c2.getX();
+		double deltaY = c1.getY() - c2.getY();
+		double deltaZ = c1.getZ() - c2.getZ();
+		double sumOfSquares = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
+		return Math.sqrt(sumOfSquares);
+	}
+	
+	public static Coordinate midPoint(Coordinate c1, Coordinate c2) {
+		double x = (c1.getX() + c2.getX())/2.0;
+		double y = (c1.getY() + c2.getY())/2.0;
+		double z = (c1.getZ() + c2.getZ())/2.0;
+		return new Coordinate(x, y, z);
+	}
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public double getZ() {
+		return z;
+	}
+
+	public void setZ(double z) {
+		this.z = z;
+	} 
+	
+	public String toString() {
+		return "(" + x + ", " + y + ", " + z + ")";
+	}
+	
+	public static void main(String[] args) {
+		Coordinate c1 = new Coordinate(0, 0, 0);
+		Coordinate c2 = new Coordinate(500, 500, 500);
+		System.out.println(c1.toString());
+		System.out.println(c2.toString());
+		System.out.println("midpoint: " + Coordinate.midPoint(c1, c2));
+		System.out.println("distance: " + Coordinate.distance(c1, c2));
+	}
+
+}

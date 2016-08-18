@@ -1,0 +1,30 @@
+import java.util.ArrayList;
+import java.util.Random;
+
+public class RandomNumber {
+	Random rand = new Random();
+	
+	//http://stackoverflow.com/questions/20389890/generating-a-random-number-between-1-and-10-java
+	public int randInt(int min, int max) {
+	    int randomNum = rand.nextInt((max - min) + 1) + min;
+	    return randomNum;
+	}
+	
+	public double randDouble(double min, double max) {
+	    double randomNum = rand.nextDouble() * (max - min + 1) + min;
+	    return randomNum;
+	}
+	
+	public int randSign(int i) {
+	   double sign = rand.nextDouble();
+	   i = sign < 0.5 ? -i : i;
+	   return i;
+	}
+	
+	public double randSign(double d) {
+	   double sign = rand.nextDouble();
+	   d = sign < 0.5 ? -d : d;
+	   return d;
+	}	
+	
+}

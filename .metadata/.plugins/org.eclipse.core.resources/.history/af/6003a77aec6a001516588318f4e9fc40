@@ -1,0 +1,59 @@
+
+public class Coordinate {
+	private double x;
+	private double y;
+	private double z;
+	
+	public Coordinate() {
+		x = 0;
+		y = 0;
+		z = 0;
+	}
+	
+	public Coordinate(double x, double y, double z) {
+		if (!inBounds(x) || !inBounds(y) || !inBounds(z))
+			throw new IllegalArgumentException("passed data out of bounds");
+		this.x = 0;
+		this.y = 0;
+		this.z = 0;
+	}
+	
+	private boolean inBounds(double d) {
+		return -500 <= d && d <= 500;
+	}
+	
+	public String toString() {
+		return "(" + x + ", " + y + ", " + z + ")";
+	}
+	
+	public double distance(Coordinate that) {
+		double deltaX = this.x - that.x;
+		double deltaY = this.y - that.y;
+		double deltaZ = this.z - that.z;
+		double sumOfSquares = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
+		return Math.sqrt(sumOfSquares);
+	}
+	
+	public static double distance(Coordinate c1, Coordinate c2) {
+		double deltaX = c1.x - c2.x;
+		double deltaY = c1.y - c2.y;
+		double deltaZ = c1.z - c2.z;
+		double sumOfSquares = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
+		return Math.sqrt(sumOfSquares);
+	}
+	
+	public Coordinate midPoint(Coordinate that) {
+		double x = (this.x + that.x)/2.0;
+		double y = (this.y + that.y)/2.0;
+		double z = (this.z + that.z)/2.0;
+		return new Coordinate(x, y, z);
+	}
+	
+	public static Coordinate midPoint(Coordinate c1, Coordinate c2) {
+		double x = (c1.x + c2.x)/2.0;
+		double y = (c1.y + c2.y)/2.0;
+		double z = (c1.z + c2.z)/2.0;
+		return new Coordinate(x, y, z);
+	}
+
+}

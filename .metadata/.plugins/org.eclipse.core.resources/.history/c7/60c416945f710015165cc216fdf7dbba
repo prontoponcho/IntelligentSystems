@@ -1,0 +1,60 @@
+import cs480viewer.task2.Viewer;
+
+public class CS480Task2 {
+	private static Viewer _viewer = null;
+	
+	public CS480Task2() {
+		Agent[] agents = initAgents(5);
+		//doPart1(agents);
+		doPart2(agents);
+		
+	}
+	
+	public static void doPart1(Agent[] agents) {
+		_viewer = new Viewer("C:\\Users\\Richard\\Google Drive\\EWU\\CSCD480 Intelligent Systems\\workspace\\task2\\tracks\\task2_1.trk", 10);
+		run(agents);
+	}
+	
+	public static void doPart2(Agent[] agents) {
+		_viewer = new Viewer("C:\\Users\\Richard\\Google Drive\\EWU\\CSCD480 Intelligent Systems\\workspace\\task2\\tracks\\task2_2.trk", 10);
+		agents = initAgentObservers(agents.length);
+		run(agents);
+	}
+	
+	public static Agent[] initAgents(int x) {
+		if (x < 0)
+			throw new IllegalArgumentException("negative array size");
+		Agent[] agents = new Agent[x];
+		for (int i = 0; i < x; i++)
+			agents[i] = new Agent();
+		return agents;
+	}
+	
+	public static Agent[] initAgentObservers(int x) {
+		if (x <= 0)
+			throw new IllegalArgumentException("array size <= 0");
+		Agent[] agents = new Agent[x];
+		AgentLocation subject = new AgentLocation();
+		for (int i = 0; i < x; i++) {
+			agents[i] = new AgentObserver(subject);
+			System.out.println("agent " + i + " " + agents[i].location().toString());
+		}
+		return agents;
+	}
+	
+	private static void run(Agent[] agents) {
+		System.out.println("running viewer");
+		for (int i = 0; i < 1000; i++) {
+			for (int j = 0; j < agents.length; j++) {
+				String fish = "fish" + (j + 1);
+				_viewer.doAddEvent(fish, agents[j].x(), agents[j].y(), agents[j].z(), agents[j].yaw(), 0, 0);			
+				agents[j].advance();
+			}
+			_viewer.doAdvanceEventClock(); 
+		}
+	}
+	
+	public static void main(final String[] args){
+		new CS480Task2();
+	}
+}

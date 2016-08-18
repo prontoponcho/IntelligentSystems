@@ -1,0 +1,13 @@
+
+public class Orientation {
+	private int pitch;
+	private int yaw;
+	private int roll;
+	
+	public Orientation(int pitch, int yaw, int roll) {
+		this.pitch = pitch;
+		this.yaw = yaw;
+		this.roll = roll;
+	}
+
+}

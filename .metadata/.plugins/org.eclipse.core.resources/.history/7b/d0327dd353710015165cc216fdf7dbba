@@ -1,0 +1,68 @@
+
+import java.util.ArrayList;
+
+import cs480viewer.task2.Viewer;
+
+public class AgentLocation {
+	ArrayList<Agent> agents;
+	
+	public AgentLocation() {
+		agents = new ArrayList<Agent>();
+	}
+	
+	public void registerAgent(Agent a) {
+		if (agents.contains(a))
+			throw new IllegalArgumentException("agent already registered");
+		else
+			agents.add(a);
+	}
+	
+	public void removeAgent(Agent a) {
+		agents.remove(a);
+	}
+	
+	public boolean isCollision(AgentObserver a1) {
+		for (Agent a2 : agents) {
+			if(a1 != a2) {
+				if (Coordinate.distance(a1.location(), a2.location()) < 45)
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isDectection(AgentDetector ad) {
+		for (Agent a : agents) {
+			
+		}
+	}
+	
+	public static void main(String[] args) {
+		Viewer _viewer = new Viewer("C:\\Users\\Richard\\Google Drive\\EWU\\CSCD480 Intelligent Systems\\workspace\\task2\\tracks\\task2_2.trk", 100);
+		AgentLocation subject = new AgentLocation();
+		
+		//course one
+		ArrayList<Coordinate> course1 = new ArrayList<Coordinate>();
+		course1.add(new Coordinate(50,0,0));
+		course1.add(new Coordinate(-50,0,0));
+		course1 = Course.intermediates(course1, 3);
+		AgentObserver a1 = new AgentObserver(subject, course1);
+		
+		//colliding course two
+		ArrayList<Coordinate> course2 = new ArrayList<Coordinate>();
+		course2.add(new Coordinate(-50,0,0));
+		course2.add(new Coordinate(50,0,0));
+		course2 = Course.intermediates(course2, 3);
+		AgentObserver a2 = new AgentObserver(subject, course2);
+		
+		Agent[] agents = {a1, a2};
+		for (int i = 0; i < 1000; i++) {
+			for (int j = 0; j < agents.length; j++) {
+				String fish = "fish" + (j + 1);
+				_viewer.doAddEvent(fish, agents[j].x(), agents[j].y(), agents[j].z(), agents[j].yaw(), 0, 0);			
+				agents[j].advance();
+			}
+			_viewer.doAdvanceEventClock(); 
+		}
+	}
+}

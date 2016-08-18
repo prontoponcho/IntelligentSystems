@@ -1,0 +1,90 @@
+
+public class Coordinate {
+	private double x;
+	private double y;
+	private double z;
+	
+	public Coordinate() {
+		setX(0);
+		setY(0);
+		setZ(0);
+	}
+	
+	public Coordinate(double x, double y, double z) {
+		this.setX(x);
+		this.setY(y);
+		this.setZ(z);
+	}
+	
+	public static double distance(Coordinate c1, Coordinate c2) {
+		double deltaX = c1.getX() - c2.getX();
+		double deltaY = c1.getY() - c2.getY();
+		double deltaZ = c1.getZ() - c2.getZ();
+		double sumOfSquares = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
+		return Math.sqrt(sumOfSquares);
+	}
+	
+	public static Coordinate midPoint(Coordinate c1, Coordinate c2) {
+		double x = (c1.getX() + c2.getX())/2.0;
+		double y = (c1.getY() + c2.getY())/2.0;
+		double z = (c1.getZ() + c2.getZ())/2.0;
+		return new Coordinate(x, y, z);
+	}
+	
+	//http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
+	public static boolean pointInTriangle (Coordinate pt, Coordinate v1, Coordinate v2, Coordinate v3) {
+	    boolean b1, b2, b3;
+	    b1 = sign(pt, v1, v2) < 0.0f;
+	    b2 = sign(pt, v2, v3) < 0.0f;
+	    b3 = sign(pt, v3, v1) < 0.0f;
+	    return ((b1 == b2) && (b2 == b3));
+	}
+	
+	private static double sign (Coordinate p1, Coordinate p2, Coordinate p3) {
+	    return (p1.getX() - p3.getX()) * (p2.getZ() - p3.getZ()) - (p2.getX() - p3.getX()) * (p1.getZ() - p3.getZ());
+	}
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public double getZ() {
+		return z;
+	}
+
+	public void setZ(double z) {
+		this.z = z;
+	} 
+	
+	public String toString() {
+		return "(" + x + ", " + y + ", " + z + ")";
+	}
+	
+	public static void main(String[] args) {
+		Coordinate c1 = new Coordinate(0, 0, 0);
+		Coordinate c2 = new Coordinate(500, 500, 500);
+		System.out.println(c1.toString());
+		System.out.println(c2.toString());
+		System.out.println("midpoint: " + Coordinate.midPoint(c1, c2));
+		System.out.println("distance: " + Coordinate.distance(c1, c2));
+	}
+
+	public boolean equals(Coordinate that) {
+		return that.getX() == this.x && 
+			   that.getY() == this.y &&
+		       that.getZ() == this.z;
+	}
+
+}

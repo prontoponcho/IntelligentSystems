@@ -1,0 +1,11 @@
+
+public class Orientation {
+
+	public static int pitch(Coordinate c1, Coordinate c2) {
+		double deltaY = c1.getY() - c2.getY();
+		double dist = Coordinate.distance(c1, c2);
+		double angle = Math.asin(deltaY / dist);
+		return (int)Math.toDegrees(angle);
+	}
+
+}

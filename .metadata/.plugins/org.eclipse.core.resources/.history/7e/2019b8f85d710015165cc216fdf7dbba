@@ -1,0 +1,41 @@
+
+public class AgentDetector extends Agent{
+	AgentLocation subject = null;
+	
+	public AgentDetector(AgentLocation subject) {
+		super();
+		this.subject = subject; 
+		//does not register with subject
+	}
+	
+	@Override
+	public void advance() {
+		Agent fish = subject.detect(this);
+		if (fish == null)
+			super.advance();
+		else {
+			track(fish);
+		}
+	}
+	
+	private void track(Agent fish) {
+		
+	}
+	
+	public boolean inView(Agent a) {
+		Coordinate pt = a.location();
+		Coordinate v1 = endViewpoint(35, 100);
+		Coordinate v2 = endViewpoint(-35, 100);
+		Coordinate v3 = this.location();
+		return Coordinate.pointInTriangle(pt, v1, v2, v3);
+	}
+	
+	private Coordinate endViewpoint(double angle, double length) {
+		double relativeAngle = (this.yaw() + angle) % 360;
+		double deltaX = length * Math.sin(Math.toRadians(relativeAngle));
+		double deltaY = 0;
+		double deltaZ = length * Math.cos(Math.toRadians(relativeAngle));
+		return new Coordinate(deltaX + this.x(), deltaY + this.y(), deltaZ + this.z());
+	}
+
+}

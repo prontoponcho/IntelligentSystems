@@ -1,0 +1,190 @@
+import java.util.ArrayList;
+import java.util.List;
+
+import cs480viewer.task1.Viewer;
+
+public class Course {
+	private ArrayList<Coordinate> lst = new ArrayList<Coordinate>();
+	
+	public Course() {}
+	
+	public Course(final List<Coordinate> lst) {
+		for(Coordinate c : lst) {
+			this.lst.add(c);
+		}
+	}
+	
+	public ArrayList<Coordinate> getCoords() {
+		return lst;
+	}
+	
+	//calculates intermediate coordinates of a minimum distance apart
+	public void intermediates(int minDist) {
+		ArrayList<Coordinate> temp = new ArrayList<Coordinate>();
+		for(int i = 0; i < lst.size() - 1; i++) {
+			temp.add(lst.get(i));
+			intermediates(lst.get(i), lst.get(i + 1), temp, minDist);
+		}
+		temp.add(lst.get(lst.size() - 1));
+		lst = temp;
+	}
+	
+	//helper function
+	private static void intermediates(Coordinate c1, Coordinate c2, ArrayList<Coordinate> lst, int minDist) {
+		if (Coordinate.distance(c1, c2) < minDist) 
+			return;
+		Coordinate mid = Coordinate.midPoint(c1, c2);
+		intermediates(c1, mid, lst, minDist);
+		lst.add(mid);
+		intermediates(mid, c2, lst, minDist);
+	}
+	
+	public void perturb() {
+		int angle = 0;
+		for (Coordinate c : lst) {
+			double perturbation = Math.sin(10 * Math.toRadians(angle++)) + 20;
+			c.setY(c.getY() + perturbation);
+		}
+	}
+	
+	public void smooth() {
+		while (true) {
+			ArrayList<Double> yaws = new ArrayList<Double>();
+			for (int i = 0; i < lst.size() - 1; i++) {
+				double yaw = Orientation.yaw(lst.get(i), lst.get(i + 1));
+				yaws.add(yaw);
+			}
+			ArrayList<Integer> indexes = smooth(yaws);
+			if (indexes.size() == 0) break; //nothing to smooth
+			for(Integer i : indexes) {
+//				if (i > 3 && i < lst.size() - 3) {
+//					lst.remove(i + 1);
+//					lst.remove(i - 1);
+//					lst.set(i - 1, Coordinate.midPoint(lst.get(i - 2), lst.get(i)));
+//				} else if (i > 0 && i < lst.size() - 1)
+//					lst.set(i, Coordinate.midPoint(lst.get(i - 1), lst.get(i + 1)));
+				lst.set(i, Coordinate.midPoint(lst.get(i - 1), lst.get(i + 1)));
+				
+			}
+			//intermediates(3);
+		}
+	}
+	
+	private ArrayList<Integer> smooth(ArrayList<Double> angles) {
+		ArrayList<Integer> indexes = new ArrayList<Integer>();
+		for (int i = 0; i < angles.size() - 1; i++) {
+			double deltaAngle = angles.get(i + 1) - angles.get(i);
+			if (Math.abs(deltaAngle) > 5 && Math.abs(deltaAngle) < 350) {
+				System.out.println(deltaAngle);
+				indexes.add(i + 1);		
+			}
+		}
+		return indexes;
+	}
+
+	public Coordinate[] toArray() {
+		Coordinate[] ara = new Coordinate[lst.size()];
+		for(int i = 0; i < lst.size(); i++) {
+			ara[i] = lst.get(i);
+		}
+		return ara;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		for (int i = 0; i < lst.size() - 1; i++) {
+			sb.append(lst.get(i).toString() + ", ");
+		}
+		sb.append(lst.get(lst.size() - 1) + "]");
+		return sb.toString();
+	}
+	
+   public static Course generateRandomCourse(int size) {
+	   RandomNumber rn = new RandomNumber();
+	   ArrayList<Coordinate> lst = new ArrayList<Coordinate>();
+	   for (int i = 0; i < size; i++) {
+		   double x = rn.randDouble(-500, 500);
+		   double y = rn.randDouble(0, 500);
+		   double z = rn.randDouble(-500, 500);
+		   lst.add(new Coordinate(x, y, z));
+	   }
+	   return new Course(lst);
+   }
+   
+   public static Course horizontalSquare(int length) {
+	   ArrayList<Coordinate> lst = new ArrayList<Coordinate>();
+	   lst.add(new Coordinate(length, 50, length));
+	   lst.add(new Coordinate(length, 50, -length));
+	   lst.add(new Coordinate(-length, 50, -length));
+	   lst.add(new Coordinate(-length, 50, length));
+	   lst.add(new Coordinate(length, 50, length));
+	   return new Course(lst);
+   }
+   
+   public static Course horizontalClockwise(int radius) {
+	   ArrayList<Coordinate> lst = new ArrayList<Coordinate>();
+	   for (int i = 360; i > 0; i--) {
+		   double x = radius * Math.cos(Math.toRadians(i));
+		   double z = radius * Math.sin(Math.toRadians(i));
+		   lst.add(new Coordinate(x, 50, z));
+	   }
+	   return new Course(lst);
+	   
+   }
+   
+   public static Course horizontalCounterClockwise(int radius) {
+	   ArrayList<Coordinate> lst = new ArrayList<Coordinate>();
+	   for (int i = 0; i < 360; i++) {
+		   double x = radius * Math.cos(Math.toRadians(i));
+		   double z = radius * Math.sin(Math.toRadians(i));
+		   lst.add(new Coordinate(x, 50, z));
+	   }
+	   return new Course(lst);
+	   
+   }
+   
+   public static Course verticalClockwise(int radius) {
+	   ArrayList<Coordinate> lst = new ArrayList<Coordinate>();
+	   for (int i = 0; i < 360; i++) {
+		   double x = radius * Math.cos(Math.toRadians(i));
+		   double y = radius * Math.sin(Math.toRadians(i));
+		   lst.add(new Coordinate(x, y, radius));
+	   }
+	   return new Course(lst);
+   }
+   
+   public static Course verticalCounterClockwise(int radius) {
+	   ArrayList<Coordinate> lst = new ArrayList<Coordinate>();
+	   for (int i = 360; i > 0; i--) {
+		   double x = radius * Math.cos(Math.toRadians(i));
+		   double y = radius * Math.sin(Math.toRadians(i));
+		   lst.add(new Coordinate(x, y, radius));
+	   }
+	   return new Course(lst);
+   }
+   
+   public static Course straight(int length) {
+	   ArrayList<Coordinate> lst = new ArrayList<Coordinate>();
+	   for (int i = 0; i < length; i++) {
+		   lst.add(new Coordinate(i, 50, 0));
+	   }
+	   return new Course(lst);
+   }
+   
+   public static Course angled(int length) {
+	   ArrayList<Coordinate> lst = new ArrayList<Coordinate>();
+	   for (int i = 0, j = 0; i < length; i++) {
+		   if (i < length/2)
+			   lst.add(new Coordinate(i, 50, 0));
+		   else
+			   lst.add(new Coordinate(length/2, 50, j++));
+	   }
+	   return new Course(lst);
+   }
+   
+	//for testing
+	public static void main(String[] args) {
+
+	}
+}
